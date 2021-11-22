@@ -206,7 +206,8 @@ void erosion_simd_5x5(uint8_t input_data[], uint8_t out_data[], uint8_t se[], in
 			{
 				for(ys=-NC5; ys<=NC5; ys++)
 				{
-					pixel8[NS5 *(-ys+NC5) + (-xs+NC5)] = vld1q_u8(&(block[(2*NC5+W) * (NC5+ys) + (x+xs+NC5)]));
+					//pixel8[NS5 *(-ys+NC5) + (-xs+NC5)] = vld1q_u8(&(block[(2*NC5+W) * (NC5+ys) + (x+xs+NC5)]));
+					pixel8[NS5 *(ys+NC5) + (xs+NC5)] = vld1q_u8(&(block[(2*NC5+W) * (NC5+ys) + (x+xs+NC5)]));
 				}
 			}
 
@@ -216,7 +217,7 @@ void erosion_simd_5x5(uint8_t input_data[], uint8_t out_data[], uint8_t se[], in
 				temp_min = vdupq_n_u8(255); //各レーンで255を代入
 				for(sx=0; sx<NS5*NS5; sx=sx+1)
 				{
-					se_element = vdupq_n_u8(se[(NS5*NS5 - sx) * K + j]);
+					se_element = vdupq_n_u8(se[(NS5*NS5-1-sx) * K + j]);
 					pixel = vqaddq_u8(pixel8[sx], se_element); //飽和演算で加算，255を超えた値は自動的に0に
 					temp_min = vminq_u8(temp_min, pixel); //現在の最大値と比較，各レーンで大きい値が出力
 				}
@@ -287,7 +288,7 @@ void erosion_simd_7x7(uint8_t input_data[], uint8_t out_data[], uint8_t se[], in
 			{
 				for(ys=-NC7; ys<=NC7; ys++)
 				{
-					pixel8[NS7 *(-ys+NC7) + (-xs+NC7)] = vld1q_u8(&(block[(2*NC7+W) * (NC7+ys) + (x+xs+NC7)]));
+					pixel8[NS7 *(ys+NC7) + (xs+NC7)] = vld1q_u8(&(block[(2*NC7+W) * (NC7+ys) + (x+xs+NC7)]));
 				}
 
 			}
