@@ -11,11 +11,10 @@
 static PyObject* morph_mod_5x5(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs
     err = PyArg_ParseTuple(
         args, "OOO",
         &input_array, &output_array, &se
@@ -34,11 +33,10 @@ static PyObject* morph_mod_5x5(PyObject *self, PyObject *args)
 static PyObject* morph_mod_7x7(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs
     err = PyArg_ParseTuple(
         args, "OOO",
         &input_array, &output_array, &se
@@ -57,11 +55,10 @@ static PyObject* morph_mod_7x7(PyObject *self, PyObject *args)
 static PyObject* morph_moe_5x5(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs
     err = PyArg_ParseTuple(
         args, "OOO",
         &input_array, &output_array, &se
@@ -80,11 +77,10 @@ static PyObject* morph_moe_5x5(PyObject *self, PyObject *args)
 static PyObject* morph_moe_7x7(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs
     err = PyArg_ParseTuple(
         args, "OOO",
         &input_array, &output_array, &se
@@ -103,11 +99,10 @@ static PyObject* morph_moe_7x7(PyObject *self, PyObject *args)
 static PyObject* morph_ave(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims;
     PyArrayObject *input1_array, *input2_array, *output_array;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input1, Input2, Output
     err = PyArg_ParseTuple(
         args, "OOO",
         &input1_array, &input2_array, &output_array
@@ -124,11 +119,10 @@ static PyObject* morph_ave(PyObject *self, PyObject *args)
 static PyObject* morph_lod_5x5(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *weights, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs, Weights
     err = PyArg_ParseTuple(
         args, "OOOO",
         &input_array, &output_array, &se, &weights
@@ -146,11 +140,10 @@ static PyObject* morph_lod_5x5(PyObject *self, PyObject *args)
 static PyObject* morph_loe_5x5(PyObject *self, PyObject *args)
 {
     int err, type;
-    //npy_intp ndim;
     npy_intp *image_dims, *se_dims;
     PyArrayObject *input_array, *output_array, *weights, *se;
 
-    // parse arguments 画像3枚引数
+    // parse arguments: Input, Output, SEs, Weights
     err = PyArg_ParseTuple(
         args, "OOOO",
         &input_array, &output_array, &se, &weights
@@ -179,9 +172,9 @@ static PyMethodDef methods[] = {
     {
       "moe_7x7", morph_moe_7x7, METH_VARARGS, ""
     },
-		{
-		  "ave", morph_ave, METH_VARARGS, ""
-	  },
+    {
+      "ave", morph_ave, METH_VARARGS, ""
+    },
     {
       "lod_5x5", morph_lod_5x5, METH_VARARGS, ""
     },
