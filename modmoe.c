@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <arm_neon.h>
 
+//Maximum of Erosions, Minimum of Dilations
+
 #define NS5 5 //Size of SE 5x5
 #define NC5 2 //Center of SE 5x5
 
