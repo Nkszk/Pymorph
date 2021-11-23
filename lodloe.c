@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <arm_neon.h>
 
-#define NS5 5 //Size of SE (5x5)
-#define NC5 2 //Center of SE (5x5)
+#define NS5 5 //Size of SE 5x5
+#define NC5 2 //Center of SE 5x5
 
-#define NS7 7 //Size of SE (7x7)
-#define NC7 3 //Center of SE (7x7)
+#define NS7 7 //Size of SE 7x7
+#define NC7 3 //Center of SE 7x7
 
 void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], float32_t alpha[], int H, int W, int K)
 {
 	int sx, sy;
 	int i, j, x, y, xs, ys, z;
-	uint8x8_t pixel4[NS5*NS5]; //まずは，メモリからローカルな変数へコピーするための配列
+	uint8x8_t pixel4[NS5*NS5]; //Set of pixels supported by SE
 	uint8x8_t temp_max;
 	uint8x8_t pixel;
 	uint8x8_t se_element;
@@ -23,25 +23,25 @@ void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 	uint8_t czero[8] = {  0,   0,   0,   0,   0,   0,   0,   0};
 	uint8_t cmax[8]  = {255, 255, 255, 255, 255, 255, 255, 255};
 
-  float32_t acc[8];
+    float32_t acc[8];
 	uint8_t   i_temp_max[8];
 	uint8_t   round_acc[8];
 
-  //ブロックのための領域確保
+  //Allocation Memory for the block
   uint8_t *block;
   block = (uint8_t *)alloca( sizeof(uint8_t) * NS5 * (NC5 + W + NC5) );
 
 	zero8 = vld1_u8(czero);
 	max8  = vld1_u8(cmax);
 
-	for(y=0; y<NC5; y++) //ブロックの初期化，0から第NC-1ラインまで
+	for(y=0; y<NC5; y++) //Initialization of the block, 0 to NC
 	{
 		for(x=0; x < 2*NC5+W; x++)
 		{
 			block[(2*NC5+W) * y + x] = 0;
 		}
 	}
-	for(y=NC5; y<NS5; y++) //ブロックの初期化，第NCラインから第2NC-1ラインまで
+	for(y=NC5; y<NS5; y++) //Initialization of the block, NC to NS 
 	{
 		for(x=    0; x <     NC5; x++) block[(2*NC5+W) * y + x] = 0;
 		for(x=  NC5; x <   NC5+W; x++) block[(2*NC5+W) * y + x] = input_data[(y-NC5)*W + (x - NC5)];
@@ -52,7 +52,7 @@ void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 	{
 		for(x=0; x<W; x=x+8)
 		{
-			//ブロックからpixel8への展開を書く
+			//The block to pixel4
 			for(xs=-NC5; xs<=NC5; xs++)
 			{
 				for(ys=-NC5; ys<=NC5; ys++)
@@ -61,20 +61,19 @@ void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 				}
 			}
 
-			acc[0] = 0.0; acc[1] = 0.0; acc[2] = 0.0; acc[3] = 0.0; acc[4] = 0.0; acc[5] = 0.0; acc[6] = 0.0; acc[7] = 0.0; //0でクリア
+			acc[0] = 0.0; acc[1] = 0.0; acc[2] = 0.0; acc[3] = 0.0; acc[4] = 0.0; acc[5] = 0.0; acc[6] = 0.0; acc[7] = 0.0; //Clear
 
 			for(j=0; j<K; j++)
 			{
-				//temp_max =veor_u8(temp_max, temp_max); //各ビットでexorをとって０にクリア
-				temp_max = zero8;
+				temp_max = zero8; //Clear max as zero
 				for(sx=0; sx<NS5*NS5; sx=sx+1)
 				{
-					//se_element = vdup_n_u8(se[NS5*NS5*j + sx]); //構造要素の一つの値をレジスタのすべてのレーンへコピー
-					se_element = vdup_n_u8(se[sx * K + j]);
-					pixel      = vqsub_u8(pixel4[sx], se_element); //ベクトル加算(飽和)
-					temp_max   = vmax_u8(temp_max, pixel); //現在の最大値と比較，各レーンで大きい値が出力
+					se_element = vdup_n_u8(se[sx * K + j]); //Copy a bias to each lane
+					pixel      = vqsub_u8(pixel4[sx], se_element); //Saturated addition
+					temp_max   = vmax_u8(temp_max, pixel); //Max
 				}
-				vst1_u8(i_temp_max, temp_max); //配列へストア
+				vst1_u8(i_temp_max, temp_max); 
+				//Linear combination
 				acc[0] = acc[0] + (float32_t)i_temp_max[0] * alpha[j];
 				acc[1] = acc[1] + (float32_t)i_temp_max[1] * alpha[j];
 				acc[2] = acc[2] + (float32_t)i_temp_max[2] * alpha[j];
@@ -84,6 +83,7 @@ void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 				acc[6] = acc[6] + (float32_t)i_temp_max[6] * alpha[j];
 				acc[7] = acc[7] + (float32_t)i_temp_max[7] * alpha[j];
 			}
+			//Rounding, quantization
 			for(z=0; z<8; z++){
 				if(acc[z] > 254.5)acc[z]=255;
 				else if(acc[z] < 0.0)acc[z]=0;
@@ -98,13 +98,11 @@ void lod_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 			round_acc[6] = (uint8_t)acc[6];
 			round_acc[7] = (uint8_t)acc[7];
 			out_d = vld1_u8(round_acc);
-			//out_d = vmax_u8(out_d, zero8);
-			//out_d = vmin_u8(out_d, max8);
-			//出力の書き込み先の変更
-			vst1_u8(&(output_data[y*W+x]), out_d); //出力画像のアドレスへストア
+			
+			vst1_u8(&(output_data[y*W+x]), out_d); //Store
 		}
 
-		//ブロックの更新
+		//Update the block
 		for(ys=0; ys<NS5-1; ys++)
 		{
 			for(xs=0; xs<2*NC5+W; xs++)
@@ -130,7 +128,7 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 {
 	int sx, sy;
 	int i, j, x, y, xs, ys, z;
-	uint8x8_t pixel4[NS5*NS5]; //メモリからローカルな変数へコピーするための配列
+	uint8x8_t pixel4[NS5*NS5]; //Set of pixels supported by SE
 	uint8x8_t temp_min;
 	uint8x8_t pixel;
 	uint8x8_t se_element;
@@ -146,18 +144,18 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 	zero8 = vld1_u8(czero);
 	max8  = vld1_u8(cmax);
 
-	//ブロックのための領域確保
+	//Allocation Memory for the block
 	uint8_t *block;
 	block = (uint8_t *)alloca( sizeof(uint8_t) * NS5 * (NC5 + W + NC5) );
 
-	for(y=0; y<NC5; y++) //ブロックの初期化，0から第NC-1ラインまで
+	for(y=0; y<NC5; y++) //Initialization of the block, 0 to NC
 	{
 		for(x=0; x < 2*NC5+W; x++)
 		{
 			block[(2*NC5+W) * y + x] = 255;
 		}
 	}
-	for(y=NC5; y<NS5; y++) //ブロックの初期化，第NCラインから第2NC-1ラインまで
+	for(y=NC5; y<NS5; y++) //Initialization of the block, NC to NS 
 	{
 		for(x=   0; x <      NC5; x++) block[(2*NC5+W) * y + x] = 255;
 		for(x=  NC5; x <   NC5+W; x++) block[(2*NC5+W) * y + x] = input_data[(y-NC5) * W + (x - NC5)];
@@ -168,7 +166,7 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 	{
 		for(x=0; x<W; x=x+8)
 		{
-			//ブロックからpixel8への展開を書く
+			//The block to pixel4
 			for(xs=-NC5; xs<=NC5; xs++)
 			{
 				for(ys=-NC5; ys<=NC5; ys++)
@@ -180,15 +178,15 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 			acc[0] = 0.0; acc[1] = 0.0; acc[2] = 0.0; acc[3] = 0.0; acc[4] = 0.0; acc[5] = 0.0; acc[6] = 0.0; acc[7] = 0.0; //0でクリア
 			for(j=0; j<K; j++)
 			{
-				temp_min = max8; //最大値255にセット
+				temp_min = max8; //Clear min as 255
 				for(sx=0; sx<NS5*NS5; sx=sx+1)
 				{
-					//se_element = vdup_n_u8(se[NS5*NS5*j + NS5*NS5 - 1 - sx]); //構造要素の一つの値をレジスタのすべてのレーンへコピー
-          se_element = vdup_n_u8(se[(NS5*NS5-1-sx) * K + j]);
-					pixel = vqadd_u8(pixel4[sx], se_element); //ベクトル加算
-					temp_min = vmin_u8(temp_min, pixel); //現在の最大値と比較，各レーンで大きい値が出力
+					se_element = vdup_n_u8(se[(NS5*NS5-1-sx) * K + j]); //Copy a bias to each lane
+					pixel = vqadd_u8(pixel4[sx], se_element); //Saturated addition
+					temp_min = vmin_u8(temp_min, pixel); //Min
 				}
-				vst1_u8(i_temp_min, temp_min); //配列へストア
+				vst1_u8(i_temp_min, temp_min); 
+				//Linear combination
 				acc[0] = acc[0] + (float32_t)i_temp_min[0] * alpha[j];
 				acc[1] = acc[1] + (float32_t)i_temp_min[1] * alpha[j];
 				acc[2] = acc[2] + (float32_t)i_temp_min[2] * alpha[j];
@@ -198,6 +196,7 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 				acc[6] = acc[6] + (float32_t)i_temp_min[6] * alpha[j];
 				acc[7] = acc[7] + (float32_t)i_temp_min[7] * alpha[j];
 			}
+			//Rounding, quantization
 			for(z=0; z<8; z++){
 				if(acc[z] > 254.5)acc[z]=255;
 				else if(acc[z] < 0.0)acc[z]=0;
@@ -211,13 +210,10 @@ void loe_simd_5x5(uint8_t input_data[], uint8_t output_data[], uint8_t se[], flo
 			round_acc[5] = (uint8_t)acc[5];
 			round_acc[6] = (uint8_t)acc[6];
 			round_acc[7] = (uint8_t)acc[7];
-			out_d = vld1_u8(round_acc);
-			//out_d = vmax_u8(out_d, zero8); //0から255に制限する場合
-			//out_d = vmin_u8(out_d, max8);
-			//出力の書き込み先の変更
-			vst1_u8(&(output_data[y*W+x]), out_d); //出力画像のアドレスへストア
+
+			vst1_u8(&(output_data[y*W+x]), out_d); //Store
 		}
-		//ブロックの更新
+		//Update the block
 		for(ys=0; ys<NS5-1; ys++)
 		{
 			for(xs=0; xs<2*NC5+W; xs++)
