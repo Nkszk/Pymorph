@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+#Example of Gaussian Denoising
+
 import cv2
 import numpy as np
 import morph
