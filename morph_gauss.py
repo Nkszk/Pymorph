@@ -6,7 +6,7 @@ import morph
 import time
 
 #Image
-img = cv2.imread("Lena512_noi_s25.png",0)
+img = cv2.imread("IMG/Lena512_noi_s25.png",0)
 
 #Parameters
 se_d_r = np.load("./Param/Gaussian_sigma_25/d.npy")
@@ -26,15 +26,15 @@ vo_c   = np.zeros([img.shape[0], img.shape[1]], np.uint8)
 vv     = np.zeros([img.shape[0], img.shape[1]], np.uint8)
 vi_f   = np.zeros([img.shape[0], img.shape[1]], np.float32)
 
+#Network configuration
 NS = se_d_r.shape[0] # Size of structuring elements
 K  = se_d_r.shape[2] # Number of subnet pairs
-L  = se_d_r.shape[3] # Number of layers
+L  = se_d_r.shape[3] # Number of Stages
 
 temp_se = np.zeros([NS, NS, K], np.uint8)
 temp_w  = np.zeros(K, np.float32)
 
-cv2.imshow('in',img)
-cv2.waitKey(0)
+cv2.imshow('Noisy',img)
 
 t1 = time.time()
 for ll in range(L):
@@ -60,12 +60,11 @@ for ll in range(L):
     vi_f[vi_f>255.0] = 255.0
     vi_f[vi_f<0] = 0.0
     vi = np.array(vi_f, np.uint8)
-
 t2 = time.time()
 elapsed_time = t2 -t1
-print(f"経過時間：{elapsed_time}")
+print(f"Elapsed time：{elapsed_time}")
 
-cv2.imshow('out',vi )
+cv2.imshow('Denoise',vi )
 cv2.waitKey(0)
-cv2.destroyWindow('in')
-cv2.destroyWindow('out')
+cv2.destroyWindow('Noisy')
+cv2.destroyWindow('Denoise')
