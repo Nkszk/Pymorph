@@ -10,7 +10,7 @@ This library is tested on Raspbian 10, Raspberry pi 4. This library will work on
 ```
 git clone https://github.com/Nkszk/Pymorph
 ```
-2. Install python-dev.
+2. Install python3-dev
 ```
 sudo apt-get install python3-dev
 ```
@@ -31,6 +31,8 @@ python3 morph_int.py
 ```
 
 ## About extended moprhological filters
+
+## About training of parameters
 
 [^1]: H. Fujisaki, M. Nakashizuka, "Deep Morphological Filter Networks For Gaussian Denoising, " Proc. 2020 IEEE International Conference on Image Processing, pp. 918-922, Abu Dhabi, Oct. 2020.
 [^2]: H. Fujisaki, M, Nakashizuka, "Deep Gaussian denoising network based on morphological operators with low-precision arithmetic, " IEICE Trans. on Fundamentals, Vol.E105-A,No.4,pp.-,Apr. 2022.
