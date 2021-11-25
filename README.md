@@ -30,7 +30,7 @@ python3 morph_gauss.py
 python3 morph_int.py
 ```
 
-## Extended moprhological filters
+## About extended moprhological filters
 
 [^1]: H. Fujisaki, M. Nakashizuka, "Deep Morphological Filter Networks For Gaussian Denoising, " Proc. 2020 IEEE International Conference on Image Processing, pp. 918-922, Abu Dhabi, Oct. 2020.
 [^2]: H. Fujisaki, M, Nakashizuka, "Deep Gaussian denoising network based on morphological operators with low-precision arithmetic, " IEICE Trans. on Fundamentals, Vol.E105-A,No.4,pp.-,Apr. 2022.
