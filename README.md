@@ -1,7 +1,7 @@
 # Pymorph
 Extended Morphological filter library using ARM SIMD instructions for Python on Raspberry Pi.
 Deep network for Gaussain denoiser and image completion examples using the library are also provided.
-This library and image processing applications are implemented to demnostrate the fast computation of the morphology in [^1][^2][^3].
+This library and image processing applications are implemented to demostrate the fast computation of the morphology in [^1][^2][^3].
 
 This library is tested on Raspbian 10, Raspberry pi 4. This library will work on the ARM with NEON SIMD instruction.
 
