@@ -20,7 +20,7 @@ gcc -c lodloe.c -mfpu=neon -march=armv7-a -O3
 gcc  -c modmoe.c -mfpu=neon -march=armv7-a -O3
 sudo apt-get install python3-dev
 ```
-4. Run an example of the deep Gaussian denoser [^1][^2] (Noise standard ddeviation sigma = 25, 512x512 image will be processed by about  1.8 [s]. )
+4. Run Gaussian denoising by the deep Gaussian denoser [^1][^2]  (Noise standard ddeviation sigma = 25, 512x512 image will be processed by about  1.8 [s]. )
 ```
 python3 morph_gauss.py
 ```
