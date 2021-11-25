@@ -30,9 +30,14 @@ python3 morph_gauss.py
 python3 morph_int.py
 ```
 
-## About extended moprhological filters
+## Extended moprhological filters
+The extended maoprholigcal filter outputs a image that is obtained by the combination of the basic moprhological filters, dilation and erosion.
+1. Maximum of erosions (MoE) obtains the pixel-width maximum of the set of eroded images.
+2. Maximum of dilations (MoD) obtains the pixel-width maximum of the set of eroded images.
+3. Linear combination of erosions (LoE)
+4. Linear combination of dilations (LoD)
 
-## About training of parameters
+## On training of parameters
 
 [^1]: H. Fujisaki, M. Nakashizuka, "Deep Morphological Filter Networks For Gaussian Denoising, " Proc. 2020 IEEE International Conference on Image Processing, pp. 918-922, Abu Dhabi, Oct. 2020.
 [^2]: H. Fujisaki, M, Nakashizuka, "Deep Gaussian denoising network based on morphological operators with low-precision arithmetic, " IEICE Trans. on Fundamentals, Vol.E105-A,No.4,pp.-,Apr. 2022.
