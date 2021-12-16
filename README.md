@@ -31,13 +31,23 @@ python3 morph_int.py
 ```
 
 ## Extended moprhological filters
-The extended maoprholigcal filter outputs a image that is obtained by the combination of the basic moprhological filters, dilation and erosion.
-1. Maximum of erosions (MoE) obtains the pixel-width maximum of the set of eroded images.
-2. Maximum of dilations (MoD) obtains the pixel-width maximum of the set of eroded images.
-3. Linear combination of erosions (LoE)
-4. Linear combination of dilations (LoD)
+In module "pymorph", structuring elemebnts are defined by three dimentinal array as
+structuring_elements[index, x, y]
+where the set of x, y denotes the corrdinates. Images and structring elements are limited in unsigned 8bit integer. 
+
+1. Maximum of erosions (MoE): the pixel-width maximum of the set of eroded images.
+pymorph.moe5x5 (source, dist, structuring_elements) 
+structuring_elements is defined in the size 5x5.
+pymorph.moe7x7 (source, dist, structuring_elements)
+structuring_elements is defined in the size 7x7.
+2. Maximum of dilations (MoD): the pixel-width maximum of the set of eroded images.
+3. Linear combination of erosions (LoE) : the linear combination of the set of eroded images.
+4. Linear combination of dilations (LoD) : the linear combination of the set of dilated images.
+
+
 
 ## On training of parameters
+
 
 [^1]: H. Fujisaki, M. Nakashizuka, "Deep Morphological Filter Networks For Gaussian Denoising, " Proc. 2020 IEEE International Conference on Image Processing, pp. 918-922, Abu Dhabi, Oct. 2020.
 [^2]: H. Fujisaki, M, Nakashizuka, "Deep Gaussian denoising network based on morphological operators with low-precision arithmetic, " IEICE Trans. on Fundamentals, Vol.E105-A,No.4,pp.-,Apr. 2022.
