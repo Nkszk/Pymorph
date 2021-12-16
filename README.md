@@ -36,10 +36,15 @@ structuring_elements[index, x, y]
 where the set of x, y denotes the corrdinates. Images and structring elements are limited in unsigned 8bit integer. 
 
 1. Maximum of erosions (MoE): the pixel-width maximum of the set of eroded images.
+
 pymorph.moe5x5 (source, dist, structuring_elements) 
+
 structuring_elements is defined in the size 5x5.
+
 pymorph.moe7x7 (source, dist, structuring_elements)
+
 structuring_elements is defined in the size 7x7.
+
 2. Maximum of dilations (MoD): the pixel-width maximum of the set of eroded images.
 3. Linear combination of erosions (LoE) : the linear combination of the set of eroded images.
 4. Linear combination of dilations (LoD) : the linear combination of the set of dilated images.
