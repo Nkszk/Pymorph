@@ -67,7 +67,7 @@ where the set of x, y denotes the corrdinates. Images and structring elements ar
 
  (structuring_elements is defined in the size 5x5. weights are float32)
 
-## On training of parameters
+## Training of parameters
 All paremeters are trained by TensorFlow. The details of the training are explained in [^2] and [^3].
 
 [^1]: H. Fujisaki, M. Nakashizuka, "Deep Morphological Filter Networks For Gaussian Denoising, " Proc. 2020 IEEE International Conference on Image Processing, pp. 918-922, Abu Dhabi, Oct. 2020.
