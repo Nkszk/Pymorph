@@ -35,7 +35,7 @@ In module "pymorph", structuring elemebnts are defined by three dimentinal array
 structuring_elements[index, x, y]
 where the set of x, y denotes the corrdinates. Images and structring elements are limited in uint8. 
 
-###Maximum of erosions (MoE): the pixel-width maximum of the set of eroded images.
+###　Maximum of erosions (MoE): the pixel-width maximum of the set of eroded images.
 
  pymorph.moe5x5 (source, dist, structuring_elements) 
 
@@ -45,7 +45,7 @@ where the set of x, y denotes the corrdinates. Images and structring elements ar
 
  (structuring_elements is defined in the size 7x7.)
 
-###Maximum of dilations (MoD): the pixel-width maximum of the set of eroded images.
+###　Maximum of dilations (MoD): the pixel-width maximum of the set of eroded images.
 
  pymorph.mod5x5 (source, dist, structuring_elements) 
 
@@ -55,13 +55,13 @@ where the set of x, y denotes the corrdinates. Images and structring elements ar
 
  (structuring_elements is defined in the size 7x7.)
  
-###Linear combination of erosions (LoE) : the linear combination of the set of eroded images.
+###　Linear combination of erosions (LoE) : the linear combination of the set of eroded images.
 
  pymorph.loe5x5 (source, dist, structuring_elements, weights) 
 
  (structuring_elements is defined in the size 5x5. weights are float32)
 
-###Linear combination of dilations (LoD) : the linear combination of the set of dilated images.
+###　Linear combination of dilations (LoD) : the linear combination of the set of dilated images.
 
  pymorph.lod5x5 (source, dist, structuring_elements, weights) 
 
