@@ -35,7 +35,7 @@ In module "pymorph", structuring elemebnts are defined by three dimentinal array
 structuring_elements[index, x, y]
 where the set of x, y denotes the corrdinates. Images and structring elements are limited in uint8. 
 
-###　Maximum of erosions (MoE): the pixel-width maximum of the set of eroded images.
+**Maximum of erosions (MoE)**: the pixel-width maximum of the set of eroded images.
 
  pymorph.moe5x5 (source, dist, structuring_elements) 
 
