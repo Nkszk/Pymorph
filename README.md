@@ -29,6 +29,7 @@ python3 morph_gauss.py
 ```
 python3 morph_int.py
 ```
+morph_gauss_l.py and morph_gauss_m.py are using linear combinations and max/minimu of morphological Laplacians, respectively.
 
 ## Extended moprhological filters
 In module "pymorph", structuring elemebnts are defined by three dimentinal array as
@@ -66,6 +67,18 @@ where the set of x, y denotes the corrdinates. Images and structring elements ar
  pymorph.lod5x5 (source, dist, structuring_elements, weights) 
 
  (structuring_elements is defined in the size 5x5. weights are float32)
+
+**Morphological Laplacian defined by MoD and MoE**
+
+laplacian_simd_5x5(source, dist, structuring_elements)
+
+laplacian_simd_7x7(source, dist, structuring_elements)
+
+**Morphological Laplacian defined by LoD and LoE**
+
+laplacian_simd_5x5(source, dist, structuring_elements, weights for Laplacian)
+
+laplacian_simd_7x7(source, dist, structuring_elements, weights for Laplacian)
 
 ## Training of parameters
 All paremeters are trained by TensorFlow. The details of the training are explained in [^2] and [^3].
