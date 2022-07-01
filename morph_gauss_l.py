@@ -8,7 +8,7 @@ img = cv2.imread("IMG/Lena512_noi_s25.png",0)
 
 #Parameters
 params = np.load("./Param/uint8_5_24_15_L.npy", allow_pickle=True) #for 5x5 SEs
-#params = np.load("./PARAM/uint8_7_48_15_L.npy", allow_pickle=True) #for 7x7 SEs
+#params = np.load("./Param/uint8_7_48_15_L.npy", allow_pickle=True) #for 7x7 SEs
 
 se = params[0]
 kappa = params[1]
