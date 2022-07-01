@@ -1,6 +1,6 @@
-#include </usr/include/python3.7/Python.h>
-#include </usr/include/python3.7/numpy/arrayobject.h>
-#include </usr/include/python3.7/numpy/arrayscalars.h>
+#include </usr/include/python3.9/Python.h>
+#include </usr/include/python3.9/numpy/arrayobject.h>
+#include </usr/include/python3.9/numpy/arrayscalars.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <arm_neon.h>
