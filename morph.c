@@ -7,7 +7,6 @@
 
 #include "modmoe.h" //Functions for Maximum of Erosions and Minimum of Dilations
 #include "lodloe.h" //Functions for Linear combination of dilations and erosions
-#include "morphpool.h" //Functions for Morphological poolig
 
 static PyObject* morph_mod_5x5(PyObject *self, PyObject *args)
 {
@@ -257,75 +256,6 @@ static PyObject* morph_linear_lap_7x7(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
-static PyObject* m_pool_7x7(PyObject *self, PyObject *args)
-{
-    int err, type;
-    //npy_intp ndim;
-    npy_intp *image_dims, *se_dims;
-    PyArrayObject *input_array, *output_array, *se;
-
-    // parse arguments 画像3枚引数
-    err = PyArg_ParseTuple(
-        args, "OOO",
-        &input_array, &output_array, &se
-    );
-    if(!err) return NULL;
-
-    //
-    image_dims = PyArray_DIMS(input_array);
-    se_dims    = PyArray_DIMS(se);
-
-    morph_pool_7x7(input_array->data, output_array->data, se->data, image_dims[0], image_dims[1]);
-
-    Py_RETURN_NONE;
-}
-
-static PyObject* m_pool_3x3(PyObject *self, PyObject *args)
-{
-    int err, type;
-    //npy_intp ndim;
-    npy_intp *image_dims, *se_dims;
-    PyArrayObject *input_array, *output_array, *se;
-
-    // parse arguments 画像3枚引数
-    err = PyArg_ParseTuple(
-        args, "OOO",
-        &input_array, &output_array, &se
-    );
-    if(!err) return NULL;
-
-    //
-    image_dims = PyArray_DIMS(input_array);
-    se_dims    = PyArray_DIMS(se);
-
-    morph_pool_3x3(input_array->data, output_array->data, se->data, image_dims[0], image_dims[1]);
-
-    Py_RETURN_NONE;
-}
-
-static PyObject* m_pool_5x5(PyObject *self, PyObject *args)
-{
-    int err, type;
-    //npy_intp ndim;
-    npy_intp *image_dims, *se_dims;
-    PyArrayObject *input_array, *output_array, *se;
-
-    // parse arguments 画像3枚引数
-    err = PyArg_ParseTuple(
-        args, "OOO",
-        &input_array, &output_array, &se
-    );
-    if(!err) return NULL;
-
-    //
-    image_dims = PyArray_DIMS(input_array);
-    se_dims    = PyArray_DIMS(se);
-
-    morph_pool_5x5(input_array->data, output_array->data, se->data, image_dims[0], image_dims[1]);
-
-    Py_RETURN_NONE;
-}
-
 static PyMethodDef methods[] = {
     {
       "mod_5x5", morph_mod_5x5, METH_VARARGS, ""
@@ -340,7 +270,7 @@ static PyMethodDef methods[] = {
       "moe_7x7", morph_moe_7x7, METH_VARARGS, ""
     },
     {
-		  "ave", morph_ave, METH_VARARGS, ""
+      "ave", morph_ave, METH_VARARGS, ""
     },
     {
       "modmoe_7x7", morph_lap_7x7, METH_VARARGS, ""
@@ -359,15 +289,6 @@ static PyMethodDef methods[] = {
     },
     {
       "loe_5x5", morph_loe_5x5, METH_VARARGS, ""
-    },
-    {
-      "pool_7x7", m_pool_7x7, METH_VARARGS, ""
-    },
-    {
-      "pool_3x3", m_pool_3x3, METH_VARARGS, ""
-    },
-    {
-      "pool_5x5", m_pool_5x5, METH_VARARGS, ""
     },
     {NULL, NULL, 0, NULL},
 };
